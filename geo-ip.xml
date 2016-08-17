@@ -41,7 +41,7 @@ declare function local:get-geoname-by-id($id as xs:string) {
   cts:search(doc(), cts:element-value-query(xs:QName("geoname_id"), $id))
 };
 
-local:nearest-match(local:find-matching-ip-data($IPv4))//geoname_id
+local:nearest-match(local:find-matching-ip-data($IPv4))
 
 
 
@@ -97,7 +97,7 @@ local:nearest-match(local:find-matching-ip-data($IPv4))
 
  
 
-</query><query name="GMaps link" focus="true" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+</query><query name="GMaps link" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
 
 declare function local:nearest-match($items as item()*) {
   fn:root($items//accuracy_radius[. eq min($items//accuracy_radius) ]) 
@@ -113,6 +113,54 @@ declare function local:gmaps-link($item) {
 };
 
 local:gmaps-link(local:nearest-match(cts:search(doc(), cts:element-value-query(xs:QName("network"), "146.198.*", "wildcarded"))))
+
+
+
+</query><query name="Query 4" focus="true" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+(:
+&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;GeoLite2-City-Blocks-IPv4&gt;
+  &lt;is_anonymous_proxy&gt;0&lt;/is_anonymous_proxy&gt;
+  &lt;registered_country_geoname_id&gt;2635167&lt;/registered_country_geoname_id&gt;
+  &lt;represented_country_geoname_id/&gt;
+  &lt;latitude&gt;51.5142&lt;/latitude&gt;
+  &lt;is_satellite_provider&gt;0&lt;/is_satellite_provider&gt;
+  &lt;accuracy_radius&gt;5&lt;/accuracy_radius&gt;
+  &lt;postal_code&gt;EC4N&lt;/postal_code&gt;
+  &lt;network&gt;146.198.247.0/24&lt;/network&gt;
+  &lt;geoname_id&gt;2643743&lt;/geoname_id&gt;
+  &lt;longitude&gt;-0.0931&lt;/longitude&gt;
+&lt;/GeoLite2-City-Blocks-IPv4&gt;
+:)
+
+declare function local:nearest-match($items as item()*) {
+  fn:root($items//accuracy_radius[. eq min($items//accuracy_radius) ]) 
+   (: for $item in $items  
+   where some $item in $items satisfies min($item//accuracy_radius)
+   return $item :)
+   
+};
+
+declare function local:gmaps-link($item) {
+  (:"http://maps.google.com/?q="||$item//latitude||","||$item//longitude :)
+  "https://maps.googleapis.com/maps/api/staticmap?center="||$item//latitude||","||$item//longitude||"&amp;amp;zoom=13&amp;amp;size=300x300"
+};
+
+(: works
+cts:search((//GeoLite2-City-Locations-en), cts:element-value-query(xs:QName("geoname_id"), "2643743"))[1 to 100]
+:)
+
+(: Resolves all international variants :)
+cts:search(doc(), 
+  cts:and-query((
+    cts:element-value-query(xs:QName("geoname_id"), "2643743"),
+    cts:not-query((  
+      cts:element-query(xs:QName("GeoLite2-City-Blocks-IPv4"), cts:and-query(())),
+      cts:element-query(xs:QName("GeoLite2-City-Blocks-IPv6"), cts:and-query(()))
+    ))
+  ))
+)
 
 
 
