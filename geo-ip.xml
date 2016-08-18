@@ -22,15 +22,26 @@ import module namespace functx = "http://www.functx.com" at "/MarkLogic/functx/f
 cts:search(doc(), cts:element-value-query(xs:QName("city_name"), "London"))
 :)
 
-declare variable $IPv4 as xs:string := "43.230.176.243";
+declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139.130.4.5", "54.240.195.68", "74.125.224.72", 
+"151.111.166.96", "170.149.161.130", "54.240.254.230", "78.41.128.140", "62.138.116.25", "54.239.54.107", "95.130.42.33", 
+"147.67.119.103", "205.193.215.159", "31.192.231.167", "195.66.10.19", "193.146.141.234", "54.239.38.117", "54.239.96.90", 
+"177.72.244.194", "52.95.193.28", "54.240.226.81", "52.95.80.34", "194.150.245.142");
+
 declare variable $SEARCH-IP as xs:string := functx:substring-before-last($IPv4, '.');
 
 declare function local:find-matching-ip-data($ipaddr as xs:string) as item()* {
   cts:search(doc(), cts:element-word-query(xs:QName("network"), functx:substring-before-last($ipaddr, '.')))
 };
 
-declare function local:nearest-match($items as item()*) {
-  fn:root($items//accuracy_radius[. eq min($items//accuracy_radius) ]) 
+declare function local:nearest-match($items as item()*, $i as xs:string?) {
+  if(empty($items))
+  then(element error {"no match for "||$i})
+  else (
+    element search{$i},
+    (: fn:root(($items//accuracy_radius[. eq min($items//accuracy_radius) ])[1]) :)
+    $items
+  
+  )
    (: for $item in $items  
    where some $item in $items satisfies min($item//accuracy_radius)
    return $item :)
@@ -41,7 +52,8 @@ declare function local:get-geoname-by-id($id as xs:string) {
   cts:search(doc(), cts:element-value-query(xs:QName("geoname_id"), $id))
 };
 
-local:nearest-match(local:find-matching-ip-data($IPv4))
+for $i in $IPv4
+return local:nearest-match(local:find-matching-ip-data($i), $i)
 
 
 
@@ -116,7 +128,7 @@ local:gmaps-link(local:nearest-match(cts:search(doc(), cts:element-value-query(x
 
 
 
-</query><query name="Look up regional info" focus="true" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+</query><query name="Look up regional info" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
 
 (:
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
@@ -196,6 +208,111 @@ BR:  http://freegeoip.net/xml/177.72.244.194
 KR: http://freegeoip.net/xml/52.95.193.28
 SG:  http://freegeoip.net/xml/54.240.226.81
 IN:  http://freegeoip.net/xml/52.95.80.34
+CH: http://freegeoip.net/xml/194.150.245.142
 
 :)
-</query></workspace></export>
+</query><query name="Query 3" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+import module namespace functx = "http://www.functx.com" at "/MarkLogic/functx/functx-1.0-nodoc-2007-01.xqy";
+
+(: The goal is to do something like this: 
+&lt;Response&gt;
+&lt;IP&gt;92.26.223.198&lt;/IP&gt;
+&lt;CountryCode&gt;GB&lt;/CountryCode&gt;
+&lt;CountryName&gt;United Kingdom&lt;/CountryName&gt;
+&lt;RegionCode/&gt;
+&lt;RegionName/&gt;
+&lt;City/&gt;
+&lt;ZipCode/&gt;
+&lt;TimeZone&gt;Europe/London&lt;/TimeZone&gt;
+&lt;Latitude&gt;51.4964&lt;/Latitude&gt;
+&lt;Longitude&gt;-0.1224&lt;/Longitude&gt;
+&lt;MetroCode&gt;0&lt;/MetroCode&gt;
+&lt;/Response&gt;
+:)
+
+(:
+cts:search(doc(), cts:element-value-query(xs:QName("city_name"), "London"))
+:)
+
+declare variable $IPv4 as xs:string := "123.192";
+declare variable $SEARCH-IP as xs:string := functx:substring-before-last($IPv4, '.');
+
+declare function local:find-matching-ip-data($ipaddr as xs:string) as item()* {
+  cts:search(doc(), cts:element-word-query(xs:QName("network"), functx:substring-before-last($ipaddr, '.')))
+};
+
+declare function local:nearest-match($items as item()*) {
+  fn:root($items//accuracy_radius[. eq min($items//accuracy_radius) ]) 
+   (: for $item in $items  
+   where some $item in $items satisfies min($item//accuracy_radius)
+   return $item :)
+   
+};
+
+declare function local:get-geoname-by-id($id as xs:string) {
+  cts:search(doc(), cts:element-value-query(xs:QName("geoname_id"), $id))
+};
+
+local:nearest-match(local:find-matching-ip-data($IPv4))
+
+
+
+ 
+
+</query><query name="Basic Search Flow" focus="true" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+import module namespace functx = "http://www.functx.com" at "/MarkLogic/functx/functx-1.0-nodoc-2007-01.xqy";
+
+declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139.130.4.5", "54.240.195.68", "74.125.224.72", 
+"151.111.166.96", "170.149.161.130", "54.240.254.230", "78.41.128.140", "62.138.116.25", "54.239.54.107", "95.130.42.33", 
+"147.67.119.103", "205.193.215.159", "31.192.231.167", "195.66.10.19", "193.146.141.234", "54.239.38.117", "54.239.96.90", 
+"177.72.244.194", "52.95.193.28", "54.240.226.81", "52.95.80.34", "194.150.245.142");
+
+declare variable $SEARCH-IP as xs:string := functx:substring-before-last($IPv4, '.');
+
+declare function local:find-matching-ip-data($ipaddr as xs:string) as item()* {
+  let $candidates :=
+  (: First try searching for three segments [xxx.xxx.xxx.*] :)
+  (: TODO - I'm using count here because I can't estimate accurately -- fix the indexes! :)
+  if (count(cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last($ipaddr, '.')||"*"), "wildcarded"))) eq 0)
+  (: If there are no matches, try the just the first two segments [xxx.xxx.*] :)
+  then (cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last(functx:substring-before-last($ipaddr, '.'),'.')||"*"), "wildcarded"))) 
+  else (cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last($ipaddr, '.')||"*"), "wildcarded")))
+  (: get all matches and get the most frequent geoname id :)
+  let $sequence := $candidates/GeoLite2-City-Blocks-IPv4/geoname_id
+  let $highest-match := for $maxFreq in max(for $val in distinct-values($sequence) return count(index-of($sequence, $val))) return distinct-values($sequence)[count(index-of($sequence, .)) eq $maxFreq]
+  return $candidates[//geoname_id/. eq $highest-match]
+};
+
+declare function local:nearest-match($items as item()*, $i as xs:string?) {
+  fn:root(($items//accuracy_radius[. eq min($items//accuracy_radius) ])[1]) 
+   (: for $item in $items  
+   where some $item in $items satisfies min($item//accuracy_radius)
+   return $item :)
+   
+};
+
+declare function local:gmaps-link($item) {
+  (:"http://maps.google.com/?q="||$item//latitude||","||$item//longitude :)
+  "https://maps.googleapis.com/maps/api/staticmap?center="||$item//latitude||","||$item//longitude||"&amp;amp;zoom=13&amp;amp;size=450x300"
+};
+
+(:
+xs:string(functx:substring-before-last(functx:substring-before-last($IPv4, '.'),'.')||"*"),
+xs:string(functx:substring-before-last($IPv4, '.')||"*") :)
+
+(:
+local:gmaps-link(local:nearest-match(local:find-matching-ip-data($IPv4))) :)
+
+for $i in $IPv4
+return local:nearest-match(local:find-matching-ip-data($i), $i)</query><query name="Query 4" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+xdmp:estimate(
+cts:search(doc(),
+cts:element-value-query(
+xs:QName("network"),
+"212.58.246*",
+"wildcarded"
+))
+)</query></workspace></export>
