@@ -274,7 +274,6 @@ declare variable $SEARCH-IP as xs:string := functx:substring-before-last($IPv4, 
 declare function local:find-matching-ip-data($ipaddr as xs:string) as item()* {
   let $candidates :=
   (: First try searching for three segments [xxx.xxx.xxx.*] :)
-  (: TODO - I'm using count here because I can't estimate accurately -- fix the indexes! :)
   if (count(cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last($ipaddr, '.')||"*"), "wildcarded"))) eq 0)
   (: If there are no matches, try the just the first two segments [xxx.xxx.*] :)
   then (cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last(functx:substring-before-last($ipaddr, '.'),'.')||"*"), "wildcarded"))) 
@@ -298,6 +297,14 @@ declare function local:gmaps-link($item) {
   "https://maps.googleapis.com/maps/api/staticmap?center="||$item//latitude||","||$item//longitude||"&amp;amp;zoom=13&amp;amp;size=450x300"
 };
 
+declare function local:get-geoname-id($item as xs:string) {
+  cts:search((//GeoLite2-City-Locations-en), cts:element-value-query(xs:QName("geoname_id"), $item))
+};
+
+declare function local:get-country-geoname-id($item as xs:string) {
+  cts:search( (//GeoLite2-Country-Locations-en), cts:element-value-query(xs:QName("geoname_id"), $item))
+};
+
 (:
 xs:string(functx:substring-before-last(functx:substring-before-last($IPv4, '.'),'.')||"*"),
 xs:string(functx:substring-before-last($IPv4, '.')||"*") :)
@@ -305,14 +312,65 @@ xs:string(functx:substring-before-last($IPv4, '.')||"*") :)
 (:
 local:gmaps-link(local:nearest-match(local:find-matching-ip-data($IPv4))) :)
 
-for $i in $IPv4
-return local:nearest-match(local:find-matching-ip-data($i), $i)</query><query name="Query 4" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
 
-xdmp:estimate(
+for $i in $IPv4
+let $match := local:nearest-match(local:find-matching-ip-data($i), $i)
+return (
+  element data {
+    element ip {$i},
+    $match, 
+    local:get-country-geoname-id($match//registered_country_geoname_id), 
+    local:get-geoname-id($match//geoname_id)
+  }
+)
+
+
+(:
+let $ipmatch := local:nearest-match(local:find-matching-ip-data($IPv4[1]), $IPv4[1])
+return ($ipmatch, local:get-country-geoname-id($ipmatch//registered_country_geoname_id), local:get-geoname-id($ipmatch//geoname_id))
+:)</query><query name="Query 4" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+import module namespace functx = "http://www.functx.com" at "/MarkLogic/functx/functx-1.0-nodoc-2007-01.xqy";
+
+declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139.130.4.5", "54.240.195.68", "74.125.224.72", 
+"151.111.166.96", "170.149.161.130", "54.240.254.230", "78.41.128.140", "62.138.116.25", "54.239.54.107", "95.130.42.33", 
+"147.67.119.103", "205.193.215.159", "31.192.231.167", "195.66.10.19", "193.146.141.234", "54.239.38.117", "54.239.96.90", 
+"177.72.244.194", "52.95.193.28", "54.240.226.81", "52.95.80.34", "194.150.245.142");
+
+declare variable $SEARCH-IP as xs:string := functx:substring-before-last($IPv4, '.');
+
+
+for $i in $IPv4 return
+count(
 cts:search(doc(),
 cts:element-value-query(
 xs:QName("network"),
-"212.58.246*",
+(functx:substring-before-last(functx:substring-before-last($i, '.'),'.')||"*"),
 "wildcarded"
 ))
-)</query></workspace></export>
+)</query><query name="Query 5" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+import module namespace functx = "http://www.functx.com" at "/MarkLogic/functx/functx-1.0-nodoc-2007-01.xqy";
+
+declare variable $IP := "52.95.80.34";
+
+declare function local:find-matching-ip-data($ipaddr as xs:string) as item()* {
+  let $candidates :=
+  (: First try searching for three segments [xxx.xxx.xxx.*] :)
+  if (count(cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last($ipaddr, '.')||"*"), "wildcarded"))) eq 0)
+  (: If there are no matches, try the just the first two segments [xxx.xxx.*] :)
+  then ("here") (: cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last(functx:substring-before-last($ipaddr, '.'),'.')||"*"), "wildcarded"))) :)
+  else ("there")(: cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last($ipaddr, '.')||"*"), "wildcarded"))) :)
+  (: get all matches and get the most frequent geoname id :)
+  return $candidates
+  (:let $sequence := $candidates/GeoLite2-City-Blocks-IPv4/geoname_id
+  let $highest-match := for $maxFreq in max(for $val in distinct-values($sequence) return count(index-of($sequence, $val))) return distinct-values($sequence)[count(index-of($sequence, .)) eq $maxFreq]
+  return $candidates  [//geoname_id/. eq $highest-match] :)
+};
+
+xdmp:estimate(
+cts:search(doc(), cts:element-value-query(xs:QName("network"), xs:string(functx:substring-before-last($IP, '.')||"*"), "wildcarded"))
+)
+</query><query name="Query 6" focus="false" active="true" content-source="14369746076098578715:0:Apps" mode="xquery">xquery version "1.0-ml";
+
+(//GeoLite2-Country-Locations-en)[1 to 10]</query></workspace></export>
