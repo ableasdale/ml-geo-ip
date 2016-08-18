@@ -297,6 +297,10 @@ declare function local:gmaps-link($item) {
   "https://maps.googleapis.com/maps/api/staticmap?center="||$item//latitude||","||$item//longitude||"&amp;amp;zoom=13&amp;amp;size=450x300"
 };
 
+declare function local:create-flag-link($item as xs:string) {
+  element img {attribute src {"/assets/images/flags/"||$item||".png"}}
+};
+
 declare function local:get-geoname-id($item as xs:string) {
   cts:search((//GeoLite2-City-Locations-en), cts:element-value-query(xs:QName("geoname_id"), $item))
 };
@@ -315,12 +319,16 @@ local:gmaps-link(local:nearest-match(local:find-matching-ip-data($IPv4))) :)
 
 for $i in $IPv4
 let $match := local:nearest-match(local:find-matching-ip-data($i), $i)
+let $country := local:get-country-geoname-id($match//registered_country_geoname_id)
+let $city := local:get-geoname-id($match//geoname_id)
 return (
   element data {
     element ip {$i},
+    element gmaps {local:gmaps-link($match)},
+    element flag {local:create-flag-link(fn:lower-case(xs:string($country//country_iso_code)))},
     $match, 
-    local:get-country-geoname-id($match//registered_country_geoname_id), 
-    local:get-geoname-id($match//geoname_id)
+    $country, 
+    $city
   }
 )
 
