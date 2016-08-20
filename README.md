@@ -3,14 +3,17 @@ MarkLogic Geo IP Location code
 
 ## TODO - Data Setup (see my csv-loader project to load the data..)
 
+
+http://geoip.nekudo.com/api/194.150.245.142
+https://lite.ip2location.com/faqs
+
+
+
 ## TODO - Database index settings
 
 Using wildcarded searches to try to improve accuracy from the basic dataset; index settings are documented at:
 https://docs.marklogic.com/guide/search-dev/wildcard#id_14163
 
-## TODO - attributions:
-- Flag icons 
-- Dataset
 
 ### Setup Notes
 ```xquery
@@ -35,3 +38,9 @@ declare function local:create-http-application-server() {
 
 local:create-http-application-server()
 ```
+
+## Attribution
+
+This site or product includes IP2Location LITE data available from <a href="http://lite.ip2location.com">http://lite.ip2location.com</a>.
+This product includes GeoLite2 data created by MaxMind, available from <a href="http://www.maxmind.com">http://www.maxmind.com</a>.
+Flag icons from famfamfam: http://www.famfamfam.com/lab/icons/flags/ 

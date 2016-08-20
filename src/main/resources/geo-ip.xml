@@ -418,6 +418,7 @@ declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139
 (: declare variable $IP as xs:string := "12.48.40.0"; :)
 
 declare function local:convert-ip-to-integer($ip as xs:string) as xs:integer {
+  (: TODO - IP v4 is a predictable datatype - XML Schema for this as a simple type? :)
   let $i := fn:reverse(fn:tokenize($ip, "\."))
   return xs:integer($i[1]) + xs:integer($i[2]) * 256 + xs:integer($i[3]) * 256 * 256 + xs:integer($i[4]) * 256 * 256 * 256
 };
