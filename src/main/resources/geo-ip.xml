@@ -413,7 +413,8 @@ cts:search((//GeoLite2-City-Locations-en), cts:element-value-query(xs:QName("geo
 declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139.130.4.5", "54.240.195.68", "74.125.224.72", 
 "151.111.166.96", "170.149.161.130", "54.240.254.230", "78.41.128.140", "62.138.116.25", "54.239.54.107", "95.130.42.33", 
 "147.67.119.103", "205.193.215.159", "31.192.231.167", "195.66.10.19", "193.146.141.234", "54.239.38.117", "54.239.96.90", 
-"177.72.244.194", "52.95.193.28", "54.240.226.81", "52.95.80.34", "194.150.245.142", "12.48.40.0");
+"177.72.244.194", "52.95.193.28", "54.240.226.81", "52.95.80.34", "194.150.245.142", "12.48.40.0", "194.213.125.0", "127.0.0.1",
+"93.210.15.68", "146.192.201.18", "213.174.72.92");
 
 (: declare variable $IP as xs:string := "12.48.40.0"; :)
 
@@ -424,8 +425,10 @@ declare function local:convert-ip-to-integer($ip as xs:string) as xs:integer {
 };
 
 declare function local:convert-integer-to-ip($int as xs:integer) as xs:string {
-(: TODO - this is a bit broken still - there's a situation where the hex is wrong if the ip ends in "0"|| :)
-  let $i := xdmp:integer-to-hex($int) 
+  (: if the hex representation is 7 characters (rather than 8), place a '0' in front to ensure the IP resolution is correct :)
+  let $i := if (string-length(xdmp:integer-to-hex($int)) eq 7)
+  then ("0" || xdmp:integer-to-hex($int))
+  else (xdmp:integer-to-hex($int))
   return
   fn:string-join(
     (xs:string(xdmp:hex-to-integer(fn:substring($i, 1, 2))),
@@ -438,5 +441,5 @@ declare function local:convert-integer-to-ip($int as xs:integer) as xs:string {
 
 for $i in $IPv4 
 return 
-  text {$i, " ", local:convert-ip-to-integer($i), " ", local:convert-integer-to-ip(local:convert-ip-to-integer($i)), " ", ($i eq local:convert-integer-to-ip(local:convert-ip-to-integer($i)))}
+  text {$i, " ", local:convert-ip-to-integer($i), " ", string-length(xdmp:integer-to-hex(local:convert-ip-to-integer($i))), " ",local:convert-integer-to-ip(local:convert-ip-to-integer($i)), " ", ($i eq local:convert-integer-to-ip(local:convert-ip-to-integer($i)))}
   </query></workspace></export>

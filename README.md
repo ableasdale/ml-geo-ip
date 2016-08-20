@@ -7,6 +7,11 @@ MarkLogic Geo IP Location search code
 http://geoip.nekudo.com/api/194.150.245.142
 https://lite.ip2location.com/faqs
 
+TODO: load this in...
+view-source:http://www.nirsoft.net/countryip/
+http://www.nirsoft.net/countryip/de.html
+
+
 
 
 ## TODO - Database index settings
@@ -43,4 +48,5 @@ local:create-http-application-server()
 
  This site or product includes IP2Location LITE data available from <a href="http://lite.ip2location.com">http://lite.ip2location.com</a>.
  This product includes GeoLite2 data created by MaxMind, available from <a href="http://www.maxmind.com">http://www.maxmind.com</a>.
+ This product includes DB IP data, available from  https://db-ip.com/db/download/city and https://db-ip.com/db/download/country
  Flag icons from famfamfam: http://www.famfamfam.com/lab/icons/flags/ 
