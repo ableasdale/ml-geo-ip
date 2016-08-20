@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:stl="http://www.codesynthesis.com/xmlns/xsstl"
+            targetNamespace="http://www.codesynthesis.com/xmlns/xsstl">
+
+  <xsd:annotation>
+    <xsd:documentation>
+      Copyright (C) 2006-2007 Code Synthesis Tools CC
+
+      Redistribution and use with or without modification are permitted
+      under the terms of the new BSD license. See the accompanying LICENSE
+      file.
+    </xsd:documentation>
+  </xsd:annotation>
+
+
+  <xsd:simpleType name="IPv4Address">
+    <xsd:annotation>
+      <xsd:documentation>
+        IPv4 address in the dotted-decimal notation.
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:simpleType name="Port">
+    <xsd:annotation>
+      <xsd:documentation>
+        Port number in the range [1, 65536].
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:restriction base="xsd:unsignedShort">
+      <xsd:minInclusive value="1"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:simpleType name="IPv4Endpoint">
+    <xsd:annotation>
+      <xsd:documentation>
+        IPv4 address and port pair in the form ip:port. IPv4 address is in
+        the dotted-decimal notation. Port is in the range [1, 65536].
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:restriction base="xsd:string">
+      <xsd:pattern value="((25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9])\.){3}(25[0-5]|2[0-4][0-9]|1[0-9][0-9]|[1-9][0-9]|[0-9]):[1-9][0-9]{0,4}"/>
+    </xsd:restriction>
+  </xsd:simpleType>
+
+
+  <xsd:complexType name="IPv4EndpointStruct">
+    <xsd:annotation>
+      <xsd:documentation>
+        Structured IPv4 address and port pair. IPv4 address is in
+        the dotted-decimal notation. Port is in the range [1, 65536].
+      </xsd:documentation>
+    </xsd:annotation>
+
+    <xsd:sequence>
+      <xsd:element name="address" type="stl:IPv4Address"/>
+      <xsd:element name="port" type="stl:Port"/>
+    </xsd:sequence>
+  </xsd:complexType>
+
+</xsd:schema>

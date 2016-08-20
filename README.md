@@ -11,6 +11,8 @@ TODO: load this in...
 view-source:http://www.nirsoft.net/countryip/
 http://www.nirsoft.net/countryip/de.html
 
+http://api.geoiplookup.net/?query=146.198.178.59
+http://geoip.nekudo.com/api/197.149.176.23/en/full
 
 
 
@@ -50,3 +52,4 @@ local:create-http-application-server()
  This product includes GeoLite2 data created by MaxMind, available from <a href="http://www.maxmind.com">http://www.maxmind.com</a>.
  This product includes DB IP data, available from  https://db-ip.com/db/download/city and https://db-ip.com/db/download/country
  Flag icons from famfamfam: http://www.famfamfam.com/lab/icons/flags/ 
+ Schema objects from: http://www.codesynthesis.com/projects/xsstl/
