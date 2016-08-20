@@ -1,5 +1,5 @@
 # ml-geo-ip
-MarkLogic Geo IP Location code
+MarkLogic Geo IP Location search code
 
 ## TODO - Data Setup (see my csv-loader project to load the data..)
 
@@ -41,6 +41,6 @@ local:create-http-application-server()
 
 ## Attribution
 
-This site or product includes IP2Location LITE data available from <a href="http://lite.ip2location.com">http://lite.ip2location.com</a>.
-This product includes GeoLite2 data created by MaxMind, available from <a href="http://www.maxmind.com">http://www.maxmind.com</a>.
-Flag icons from famfamfam: http://www.famfamfam.com/lab/icons/flags/ 
+ This site or product includes IP2Location LITE data available from <a href="http://lite.ip2location.com">http://lite.ip2location.com</a>.
+ This product includes GeoLite2 data created by MaxMind, available from <a href="http://www.maxmind.com">http://www.maxmind.com</a>.
+ Flag icons from famfamfam: http://www.famfamfam.com/lab/icons/flags/ 

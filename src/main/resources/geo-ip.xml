@@ -437,7 +437,6 @@ declare function local:convert-integer-to-ip($int as xs:integer) as xs:string {
 };
 
 for $i in $IPv4 
-return (
-  local:convert-ip-to-integer($i),
-  local:convert-integer-to-ip(local:convert-ip-to-integer($i))
-)</query></workspace></export>
+return 
+  text {$i, " ", local:convert-ip-to-integer($i), " ", local:convert-integer-to-ip(local:convert-ip-to-integer($i)), " ", ($i eq local:convert-integer-to-ip(local:convert-ip-to-integer($i)))}
+  </query></workspace></export>
