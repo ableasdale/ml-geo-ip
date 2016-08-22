@@ -14,7 +14,7 @@ http://www.nirsoft.net/countryip/de.html
 http://api.geoiplookup.net/?query=146.198.178.59
 http://geoip.nekudo.com/api/197.149.176.23/en/full
 
-
+Add VFS support for CSV loading!
 
 ## TODO - Database index settings
 

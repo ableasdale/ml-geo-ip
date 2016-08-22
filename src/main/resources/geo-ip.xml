@@ -408,7 +408,7 @@ cts:search(doc(), cts:element-value-query(xs:QName("network"), "194.150.24*", "w
 (:
 2658434, 2659272 :)
 
-cts:search((//GeoLite2-City-Locations-en), cts:element-value-query(xs:QName("geoname_id"),  ("2658434", "2659272")  ))</query><query name="IP Conversion Tests" focus="true" active="true" content-source="as:6480153153182230586:" mode="xquery">xquery version "1.0-ml";
+cts:search((//GeoLite2-City-Locations-en), cts:element-value-query(xs:QName("geoname_id"),  ("2658434", "2659272")  ))</query><query name="IP Conversion Tests" focus="false" active="true" content-source="as:6480153153182230586:" mode="xquery">xquery version "1.0-ml";
 
 declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139.130.4.5", "54.240.195.68", "74.125.224.72", 
 "151.111.166.96", "170.149.161.130", "54.240.254.230", "78.41.128.140", "62.138.116.25", "54.239.54.107", "95.130.42.33", 
@@ -444,4 +444,76 @@ declare function local:convert-integer-to-ip($int as xs:integer) as xs:string {
 for $i in $IPv4 
 return 
   text {$i, " ", local:convert-ip-to-integer($i), " ", string-length(xdmp:integer-to-hex(local:convert-ip-to-integer($i))), " ",local:convert-integer-to-ip(local:convert-ip-to-integer($i)), " ", ($i eq local:convert-integer-to-ip(local:convert-ip-to-integer($i)))}
-  </query></workspace></export>
+  </query><query name="Working IP2Location Lookup Searches" focus="true" active="true" content-source="as:6480153153182230586:" mode="xquery">xquery version "1.0-ml";
+
+(: First attempt at using the IP2Location CSV data
+
+&lt;IP2LOCATION-LITE-DB11&gt;
+&lt;CountryName&gt;Iran&lt;/CountryName&gt;
+&lt;IP-From&gt;89028864&lt;/IP-From&gt;
+&lt;TZ&gt;-&lt;/TZ&gt;
+&lt;Num&gt;45.076050&lt;/Num&gt;
+&lt;IP-TO&gt;89029119&lt;/IP-TO&gt;
+&lt;Long&gt;37.552740&lt;/Long&gt;
+&lt;CountryCode&gt;IR&lt;/CountryCode&gt;
+&lt;Area2&gt;Azarbayjan-e Gharbi&lt;/Area2&gt;
+&lt;Area1&gt; Islamic Republic of&lt;/Area1&gt;
+&lt;Lat&gt;Orumiyeh&lt;/Lat&gt;
+&lt;/IP2LOCATION-LITE-DB11&gt;
+:)
+(:
+xdmp:estimate((//IP2LOCATION-LITE-DB11)) :)
+
+declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139.130.4.5", "54.240.195.68", "74.125.224.72", 
+"151.111.166.96", "170.149.161.130", "54.240.254.230", "78.41.128.140", "62.138.116.25", "54.239.54.107", "95.130.42.33", 
+"147.67.119.103", "205.193.215.159", "31.192.231.167", "195.66.10.19", "193.146.141.234", "54.239.38.117", "54.239.96.90", 
+"177.72.244.194", "52.95.193.28", "54.240.226.81", "52.95.80.34", "194.150.245.142", "12.48.40.0", "194.213.125.0", "164.100.78.177",
+"93.210.15.68", "146.192.201.18", "213.174.72.92", "146.198.178.59", "161.148.175.40", "197.149.176.23", "131.207.14.37",
+"88.255.55.110", "186.33.211.142", "41.204.167.86", "95.173.136.70", "103.28.250.187", "103.8.161.146", "84.205.254.125"
+);
+
+declare function local:convert-ip-to-integer($ip as xs:string) as xs:integer {
+  (: TODO - IP v4 is a predictable datatype - XML Schema for this as a simple type? :)
+  let $i := fn:reverse(fn:tokenize($ip, "\."))
+  return xs:integer($i[1]) + xs:integer($i[2]) * 256 + xs:integer($i[3]) * 256 * 256 + xs:integer($i[4]) * 256 * 256 * 256
+};
+
+(:
+local:convert-ip-to-integer($IP) :)
+
+for $IP in $IPv4
+return ($IP, local:convert-ip-to-integer($IP),
+cts:search(doc(), 
+  cts:and-query((
+    cts:element-range-query(xs:QName("IP-From"), "&lt;=", local:convert-ip-to-integer($IP)),
+    cts:element-range-query(xs:QName("IP-TO"), "&gt;=", local:convert-ip-to-integer($IP))
+  ))
+)
+)
+(:
+cts:search(doc("/dates.xml")/root/entry,
+  cts:and-query((
+   cts:element-range-query(xs:QName("date"), "&gt;",
+      xs:date("2006-01-01")),
+   cts:element-range-query(xs:QName("date"), "&lt;",
+      xs:date("2008-01-01")))))
+:)</query><query name="Query 9" focus="false" active="true" content-source="as:6480153153182230586:" mode="xquery">xquery version "1.0-ml";
+
+(:
+&lt;IP-From&gt;698389760&lt;/IP-From&gt;
+&lt;TZ&gt;+02:00&lt;/TZ&gt;
+&lt;Num&gt;2041&lt;/Num&gt;
+&lt;IP-TO&gt;698390271&lt;/IP-TO&gt; :)
+
+(:
+cts:search(doc(),
+cts:element-value-query(xs:QName("IP-From"), "698389760")
+) :)
+
+cts:search(doc(),
+  cts:and-query((
+    cts:element-range-query(xs:QName("IP-From"), "&lt;=", 698389760),
+    cts:element-range-query(xs:QName("IP-TO"), "&gt;=", 698389760) 
+  ))
+)
+</query></workspace></export>
