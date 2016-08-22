@@ -472,7 +472,7 @@ declare variable $IPv4 as xs:string+ := ("43.230.176.243", "212.58.246.93", "139
 "88.255.55.110", "186.33.211.142", "41.204.167.86", "95.173.136.70", "103.28.250.187", "103.8.161.146", "84.205.254.125"
 );
 
-declare function local:convert-ip-to-integer($ip as xs:string) as xs:integer {
+declare function local:convert-ip-to-integer($ip as xs:string) as xs:unsignedInt {
   (: TODO - IP v4 is a predictable datatype - XML Schema for this as a simple type? :)
   let $i := fn:reverse(fn:tokenize($ip, "\."))
   return xs:integer($i[1]) + xs:integer($i[2]) * 256 + xs:integer($i[3]) * 256 * 256 + xs:integer($i[4]) * 256 * 256 * 256
@@ -512,8 +512,22 @@ cts:element-value-query(xs:QName("IP-From"), "698389760")
 
 cts:search(doc(),
   cts:and-query((
-    cts:element-range-query(xs:QName("IP-From"), "&lt;=", 698389760),
-    cts:element-range-query(xs:QName("IP-TO"), "&gt;=", 698389760) 
+    cts:element-range-query(xs:QName("IP-From"), "&lt;=", xs:unsignedInt(698389760)),
+    cts:element-range-query(xs:QName("IP-TO"), "&gt;=", xs:unsignedInt(698389760)) 
   ))
 )
-</query></workspace></export>
+</query><query name="Query 10" focus="false" active="true" content-source="as:6480153153182230586:" mode="xquery">xquery version "1.0-ml";
+
+(: Initial testing with slightly modified version of db:
+http://software77.net/geo-ip/
+:)
+
+(:(//IpToCountry2)[1 to 100]/root() :)
+
+(:
+xs:integer(4294967295) :)
+
+xdmp:estimate(//IpToCountry2)
+</query><query name="Query 11" focus="false" active="true" content-source="as:6480153153182230586:" mode="xquery">xquery version "1.0-ml";
+
+xs:unsignedInt(698389760)</query></workspace></export>
