@@ -11,4 +11,10 @@ public class Config {
     public static String MARKLOGIC_XCC_URI = "xcc://q:q@localhost:8000/GeoIP";
     public static Integer THREADPOOL_SIZE = 32;
 
+    public static String HOST = "localhost";
+    public static int PORT = 8000;
+    public static String USER = "q";
+    public static String PASSWD = "q";
+    public static String DATABASE = "GeoIP";
+
 }
