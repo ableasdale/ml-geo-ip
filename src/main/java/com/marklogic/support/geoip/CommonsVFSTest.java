@@ -34,7 +34,10 @@ public class CommonsVFSTest {
             String line = null;
 
             while((line = in.readLine()) != null) {
-                LOG.info(line);
+                //0033996344
+                long start = Long.parseLong(line.substring(0,10));
+                long end = Long.parseLong(line.substring(10,20));
+                LOG.info("Start: "+start+" End: "+end+" Country: "+line.substring(20,22));
             }
             /*
             for ( int i = 0; i < children.length; i++ )
