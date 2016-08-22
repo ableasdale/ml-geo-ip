@@ -1,7 +1,7 @@
 # ml-geo-ip
 MarkLogic Geo IP Location search code
 
-Current plan is to load data from 5 _freely_ available databases and to search across all 5 to get the most accurate results possible from an IP address to geolocation search.
+Current plan is to load data from 6 _freely_ available databases and to search across all 6 to get the most accurate results possible from an IP address to geolocation search.
 
 These dbs are:
 - http://software77.net/geo-ip/
@@ -9,6 +9,7 @@ These dbs are:
 - https://db-ip.com/db
 - https://dev.maxmind.com/geoip/geoip2/geolite2/
 - http://lite.ip2location.com
+- http://www.ip2country.net/download/cr.zip
 
 
 ## TODO - Data Setup (see my csv-loader project to load the data..)
@@ -33,7 +34,7 @@ Add VFS support for CSV loading!
 Using wildcarded searches to try to improve accuracy from the basic dataset; index settings are documented at:
 https://docs.marklogic.com/guide/search-dev/wildcard#id_14163
 
-Currently reviewing alternatives to figure out best index settings for this data...
+unsignedInt range indexes should be created on the IP-from and IP-to elemeents (TODO - provide this)
 
 
 ### Setup Notes
@@ -61,6 +62,8 @@ local:create-http-application-server()
 ```
 
 ## Attribution
+
+TODO - ensure all attribution is correct for all databases
 
 This site or product includes IP2Location LITE data available from <a href="http://lite.ip2location.com">http://lite.ip2location.com</a>.
 
