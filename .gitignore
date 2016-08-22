@@ -1,3 +1,5 @@
 .gradle/
 .idea/
 .DS_Store
+/src/main/resources/source-data-files
+build
