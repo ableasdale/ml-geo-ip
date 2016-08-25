@@ -6,7 +6,7 @@ xquery version "1.0-ml";
 : Time: 10:33
 :)
 
-module namespace lib-geosearch = "http://help.marklogic.com/lib-geosearch.xqy";
+module namespace lib-geosearch = "http://help.marklogic.com/lib-geosearch";
 
 import module namespace functx = "http://www.functx.com" at "/MarkLogic/functx/functx-1.0-nodoc-2007-01.xqy";
 
