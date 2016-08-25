@@ -13,17 +13,17 @@ import java.net.URISyntaxException;
 /**
  * Created by ableasdale on 25/05/2016.
  */
-public class MarkLogicSessionProvider {
+class MarkLogicSessionProvider {
 
     private ContentSource cs;
 
     private MarkLogicSessionProvider() {
-        Logger LOG = LoggerFactory.getLogger("com.marklogic.support.geoip.MarkLogicSessionProvider");
+        Logger LOG = LoggerFactory.getLogger("MarkLogicSessionProvider");
         LOG.debug("Initialising ContentSource");
         try {
             cs = ContentSourceFactory.newContentSource(new URI(Config.MARKLOGIC_XCC_URI));
         } catch (XccConfigException e) {
-            LOG.error("com.marklogic.support.geoip.Config Issue", e);
+            LOG.error("Config Issue", e);
         } catch (URISyntaxException e) {
             LOG.error("URI Issue", e);
         }
@@ -37,7 +37,7 @@ public class MarkLogicSessionProvider {
         return getInstance().cs;
     }
 
-    public static Session getSession() {
+    static Session getSession() {
         return getContentSource().newSession();
     }
 

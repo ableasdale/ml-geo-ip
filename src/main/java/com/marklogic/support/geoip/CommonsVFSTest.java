@@ -20,6 +20,9 @@ import java.io.InputStreamReader;
 
 /**
  * Created by ableasdale on 22/08/2016.
+ *
+ * TODO - this works but it's very serial right now... Threads? Larger batches?
+ *
  */
 public class CommonsVFSTest {
 

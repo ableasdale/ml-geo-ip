@@ -4,10 +4,9 @@ xquery version "1.0-ml";
 : User: ableasdale
 : Date: 21/08/2016
 : Time: 10:20
-: To change this template use File | Settings | File Templates.
 :)
 
-module namespace lib-ip = "lib-ip";
+module namespace lib-ip = "http://help.marklogic.com/lib-ip";
 
 declare function lib-ip:convert-ip-to-integer($ip as xs:string) as xs:integer {
 (: TODO - IP v4 is a predictable datatype - XML Schema for this as a simple type? :)
@@ -22,11 +21,11 @@ declare function lib-ip:convert-integer-to-ip($int as xs:integer) as xs:string {
     else (xdmp:integer-to-hex($int))
     return
         fn:string-join(
-            (
-                xs:string(xdmp:hex-to-integer(fn:substring($i, 1, 2))),
-                xs:string(xdmp:hex-to-integer(fn:substring($i, 3, 2))),
-                xs:string(xdmp:hex-to-integer(fn:substring($i, 5, 2))),
-                xs:string(xdmp:hex-to-integer(fn:substring($i, 7, 2)))
-            ), "."
+                (
+                    xs:string(xdmp:hex-to-integer(fn:substring($i, 1, 2))),
+                    xs:string(xdmp:hex-to-integer(fn:substring($i, 3, 2))),
+                    xs:string(xdmp:hex-to-integer(fn:substring($i, 5, 2))),
+                    xs:string(xdmp:hex-to-integer(fn:substring($i, 7, 2)))
+                ), "."
         )
 };
