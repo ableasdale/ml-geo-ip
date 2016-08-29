@@ -9,6 +9,14 @@ xquery version "1.0-ml";
 
 module namespace lib-view = "http://help.marklogic.com/lib-view";
 
+declare function lib-view:get-freegeoip-info($ip as xs:string) {
+    element pre {element code{xdmp:document-get("http://freegeoip.net/xml/"||$ip)}}
+};
+
+declare function lib-view:wipmania-ip($ip as xs:string) {
+    element pre {element code{xdmp:document-get("http://api.wipmania.com/"||$ip)}}
+};
+
 declare function lib-view:gmaps-link($item) {
 (:"http://maps.google.com/?q="||$item//latitude||","||$item//longitude :)
     "http://maps.googleapis.com/maps/api/staticmap?center="||$item//latitude||","||$item//longitude||"&amp;zoom=13&amp;size=450x300&amp;key=AIzaSyDLmp1mfNAgUMnFnFOrHQlNAmGSJmmqScI"

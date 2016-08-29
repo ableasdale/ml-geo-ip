@@ -42,13 +42,6 @@ declare function local:get-country-geoname-id($item as xs:string) {
     cts:search( (//GeoLite2-Country-Locations-en), cts:element-value-query(xs:QName("geoname_id"), $item))
 };
 
-declare function local:get-freegeoip-info($ip as xs:string) {
-    element pre {element code{xdmp:document-get("http://freegeoip.net/xml/"||$ip)}}
-};
-
-declare function local:wipmania-ip($ip as xs:string) {
-    element pre {element code{xdmp:document-get("http://api.wipmania.com/"||$ip)}}
-};
 
 lib-view:create-bootstrap-page(
     "title",
@@ -70,8 +63,8 @@ lib-view:create-bootstrap-page(
                     element pre {element code{$match}},
                     element pre {element code{$country}},
                     element pre {element code{$city}},
-                    local:get-freegeoip-info($i),
-                    local:wipmania-ip($i)
+                    lib-view:get-freegeoip-info($i),
+                    lib-view:wipmania-ip($i)
                 }</div>
             </div>
     }
