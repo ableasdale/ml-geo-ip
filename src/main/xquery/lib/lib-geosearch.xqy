@@ -49,16 +49,6 @@ declare function lib-geosearch:nearest-match($items as item()*, $i as xs:string?
 (: for $item in $items
    where some $item in $items satisfies min($item//accuracy_radius)
    return $item :)
-
 };
 
-(: TODO - aren't these something for a different module? :)
-declare function lib-geosearch:gmaps-link($item) {
-(:"http://maps.google.com/?q="||$item//latitude||","||$item//longitude :)
-    "https://maps.googleapis.com/maps/api/staticmap?center=" || $item//latitude || "," || $item//longitude || "&amp;zoom=13&amp;size=450x300"
-};
-
-declare function lib-geosearch:create-flag-link($item as xs:string) as element(img) {
-    element img {attribute src {"/assets/images/flags/" || $item || ".png"}}
-};
 
