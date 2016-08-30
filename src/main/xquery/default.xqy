@@ -12,6 +12,7 @@ import module namespace lib-view = "http://help.marklogic.com/lib-view" at "lib/
 lib-view:create-bootstrap-page(
     "title",
     element div {attribute class {"container"},
+        element h3 {"Pages so far"},
         element ul {
             element li {element a {attribute href {"html.xqy"}, "html.xqy"}},
             element li {element a {attribute href {"search.xqy"}, "search.xqy"}},
