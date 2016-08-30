@@ -30,6 +30,7 @@ declare function lib-geosearch:get-geoname-id($item as xs:string) as item()* {
 declare function lib-geosearch:get-country-geoname-id($item as xs:string) as item()* {
     cts:search((//GeoLite2-Country-Locations-en), cts:element-value-query(xs:QName("geoname_id"), $item))
 };
+
 (: TODO - this is really inaccurate - redo it but balance it with ipns and take the most common :)
 declare function lib-geosearch:find-matching-ip-data($ipaddr as xs:string) as item()* {
     let $candidates :=
