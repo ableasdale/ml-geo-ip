@@ -1,5 +1,6 @@
 xquery version "1.0-ml";
 
+declare namespace dir = "http://marklogic.com/xdmp/directory";
 import module namespace lib-view = "http://help.marklogic.com/lib-view" at "lib/lib-view.xqy";
 
 (:~
@@ -12,11 +13,11 @@ import module namespace lib-view = "http://help.marklogic.com/lib-view" at "lib/
 lib-view:create-bootstrap-page(
     "title",
     element div {attribute class {"container"},
-        element h3 {"Pages so far"},
+        element h3 {"Links"},
         element ul {
-            element li {element a {attribute href {"html.xqy"}, "html.xqy"}},
-            element li {element a {attribute href {"search.xqy"}, "search.xqy"}},
-            element li {element a {attribute href {"xml.xqy"}, "xml.xqy"}}
+            for $i in xdmp:filesystem-directory(xdmp:modules-root())/dir:entry/dir:filename
+            where fn:ends-with($i, ".xqy") and fn:not(fn:contains($i, "default.xqy"))
+            return element li {element a {attribute href {"/"||$i}, xs:string($i)}}
         }
     }
 )
