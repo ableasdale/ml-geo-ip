@@ -12,6 +12,11 @@ These dbs are:
 - http://www.ip2country.net/download/cr.zip
 
 
+NEW - GEONAMES DUMPS
+http://download.geonames.org/export/dump/featureCodes_en.txt
+http://download.geonames.org/export/zip/
+
+
 ## TODO - Data Setup (see my csv-loader project to load the data..)
 
 

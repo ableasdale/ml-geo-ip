@@ -25,6 +25,7 @@ dependencies {
     compile 'com.marklogic:marklogic-xcc:8.0.5'
     compile 'ch.qos.logback:logback-classic:1.+'
     compile 'org.slf4j:slf4j-api:1.7.+'
+    compile group: 'commons-io', name: 'commons-io', version: '2.5'
     compile 'org.apache.commons:commons-csv:1.4'
     compile group: 'org.apache.commons', name: 'commons-vfs2', version: '2.1'
     compile group: 'com.io7m.xom', name: 'xom', version: '1.2.10'
