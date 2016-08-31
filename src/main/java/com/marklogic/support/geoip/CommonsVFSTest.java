@@ -20,9 +20,8 @@ import java.io.InputStreamReader;
 
 /**
  * Created by ableasdale on 22/08/2016.
- *
+ * <p>
  * TODO - this works but it's very serial right now... Threads? Larger batches?
- *
  */
 public class CommonsVFSTest {
 
@@ -37,18 +36,18 @@ public class CommonsVFSTest {
 
         try {
             FileSystemManager fsManager = VFS.getManager();
-            FileObject file = fsManager.resolveFile( "zip://"+new java.io.File("").getAbsolutePath()+"/src/main/resources/source-data-files/cr.zip" );
+            FileObject file = fsManager.resolveFile("zip://" + new java.io.File("").getAbsolutePath() + "/src/main/resources/source-data-files/cr.zip");
             LOG.info(file.toString());
             FileObject db = file.getChild("cr").getChild("anp_ips.dat");
             BufferedReader in = new BufferedReader(new InputStreamReader(db.getContent().getInputStream()));
             String line = null;
 
-            while((line = in.readLine()) != null) {
+            while ((line = in.readLine()) != null) {
 
-                long start = Long.parseLong(line.substring(0,10));
-                long end = Long.parseLong(line.substring(10,20));
+                long start = Long.parseLong(line.substring(0, 10));
+                long end = Long.parseLong(line.substring(10, 20));
 
-                LOG.info("Start: "+start+" End: "+end+" Country: "+line.substring(20,22));
+                LOG.info("Start: " + start + " End: " + end + " Country: " + line.substring(20, 22));
 
                 Element root = new Element("ip2country");
                 Document doc = new Document(root);
@@ -62,7 +61,7 @@ public class CommonsVFSTest {
                 root.appendChild(to);
 
                 Element cc = new Element("CountryCode");
-                cc.appendChild(line.substring(20,22));
+                cc.appendChild(line.substring(20, 22));
                 root.appendChild(cc);
 
                 // Now write the XOM Obj to MarkLogic

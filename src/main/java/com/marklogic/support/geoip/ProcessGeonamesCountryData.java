@@ -1,7 +1,12 @@
 package com.marklogic.support.geoip;
 
+import com.marklogic.client.DatabaseClient;
+import com.marklogic.client.DatabaseClientFactory;
+import com.marklogic.client.document.XMLDocumentManager;
+import com.marklogic.client.extra.xom.XOMHandle;
 import nu.xom.Document;
 import nu.xom.Element;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.csv.CSVFormat;
 import org.apache.commons.csv.CSVRecord;
 import org.slf4j.Logger;
@@ -49,10 +54,11 @@ public class ProcessGeonamesCountryData {
 
     public static void main(String[] args) {
 
-        String f = new java.io.File("").getAbsolutePath() + "/src/main/resources/source-data-files/allCountries.txt";
+        DatabaseClient client = DatabaseClientFactory.newClient(Config.HOST, Config.PORT, Config.DATABASE, Config.USER, Config.PASSWD, DatabaseClientFactory.Authentication.DIGEST);
+        String filepath = new java.io.File("").getAbsolutePath() + "/src/main/resources/source-data-files/allCountries.txt";
 
         try {
-            Reader in = new FileReader(f);
+            Reader in = new FileReader(filepath);
             Iterable<CSVRecord> records = CSVFormat.TDF.withQuote(null).parse(in);
             for (CSVRecord record : records) {
 
@@ -135,17 +141,21 @@ public class ProcessGeonamesCountryData {
                 modificationDate.appendChild(record.get(18));
                 root.appendChild(modificationDate);
 
-                LOG.info(doc.toXML());
+                XMLDocumentManager docMgr = client.newXMLDocumentManager();
+                docMgr.write(String.format("/%s.xml", DigestUtils.md5Hex(doc.toXML())), new XOMHandle(doc));
+                
 //                LOG.debug("Debug: "+record.get(0) + " " + record.get(1) + " " + record.get(18));
+//                LOG.info(doc.toXML());
             }
         } catch (FileNotFoundException e) {
-            LOG.error(MessageFormat.format("File: {0} is unavailable", f), e);
+            LOG.error(MessageFormat.format("File: {0} is unavailable", filepath), e);
         } catch (IOException e) {
             LOG.error("An IO Exception was encountered", e);
         } catch (RuntimeException e) {
             LOG.error("A RuntimeException was encountered", e);
         }
 
+        client.release();
 
         /*
         LineIterator it = null;

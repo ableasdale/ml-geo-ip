@@ -36,8 +36,6 @@ public class CSVFileProcessor implements Runnable {
 
     }
 
-    ;
-
     public void run() {
         LOG.info("Processing file: " + FILENAME);
         processMe(INPUT, ROOT);
@@ -53,9 +51,6 @@ public class CSVFileProcessor implements Runnable {
         s = s.replaceAll("[^\\x20-\\x7e]", "");
         return s;
     }
-
-    ;
-
 
     private void processMe(Reader reader, String rootElement) {
 
@@ -88,7 +83,5 @@ public class CSVFileProcessor implements Runnable {
             s.close();
         }
     }
-
-    ;
 
 }
