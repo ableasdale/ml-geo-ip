@@ -14,7 +14,7 @@ import module namespace lib-testdata = "http://help.marklogic.com/lib-testdata" 
 xdmp:set-response-content-type("application/xml"),
 xdmp:set-response-encoding("utf-8"),
 element data {
-    for $i in lib-testdata:get-long-ip-list()
+    for $i in lib-testdata:get-aws-ip-list()
     return element Location {
         attribute ip {$i},
         attribute ipn {lib-ip:convert-ip-to-integer($i)},
