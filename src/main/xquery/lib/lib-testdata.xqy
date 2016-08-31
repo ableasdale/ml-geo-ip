@@ -136,3 +136,7 @@ declare function lib-testdata:get-aws-ip-list() as xs:string+ {
     "54.239.128.0", "54.239.192.0", "54.240.128.0", "204.246.164.0", "204.246.168.0", "204.246.174.0", "204.246.176.0",
     "205.251.192.0", "205.251.249.0", "205.251.250.0", "205.251.252.0", "205.251.254.0", "216.137.32.0")
 };
+
+declare function lib-testdata:get-large-testset() as xs:string+ {
+    (lib-testdata:get-pingdom-ip-list(), lib-testdata:get-sockslist-ip-list(), lib-testdata:get-gtm-ip-list(), lib-testdata:get-company-ip-list(), lib-testdata:get-cloudflare-ip-list(), lib-testdata:get-aws-ip-list())
+};
