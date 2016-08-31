@@ -12,9 +12,9 @@ import module namespace lib-testdata = "http://help.marklogic.com/lib-testdata" 
 import module namespace lib-view = "http://help.marklogic.com/lib-view" at "lib/lib-view.xqy";
 
 lib-view:create-bootstrap-page(
-        "title",
+        "IP / IPN Conversion Tests",
         <div class="container">
-            <h3>Title</h3>
+            <h3>IP / IPN Conversion Tests</h3>
             <table class="table table-striped table-bordered table-condensed">
                 <thead>
                     <tr>
