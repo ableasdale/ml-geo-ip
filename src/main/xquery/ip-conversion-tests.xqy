@@ -27,25 +27,23 @@ lib-view:create-bootstrap-page(
                         <th>Same?</th>
                     </tr>
                 </thead>
-                <tbody>
-                    {
-                        for $i at $pos in lib-testdata:get-large-testset() (: additional-testdata:stupidly-long-ip-list() :)
-                        return
-                            element tr {
-                                element td {$pos},
-                                element td {$i},
-                                element td {lib-ip:convert-ip-to-integer($i)},
-                                element td {fn:string-length(xdmp:integer-to-hex(lib-ip:convert-ip-to-integer($i)))},
-                                element td {lib-ip:convert-integer-to-ip(lib-ip:convert-ip-to-integer($i))},
-                                element td {
+                <tbody>{
+                    for $i at $pos in lib-testdata:get-large-testset() (: additional-testdata:stupidly-long-ip-list() :)
+                    return
+                        element tr {
+                            element td {$pos},
+                            element td {$i},
+                            element td {lib-ip:convert-ip-to-integer($i)},
+                            element td {fn:string-length(xdmp:integer-to-hex(lib-ip:convert-ip-to-integer($i)))},
+                            element td {lib-ip:convert-integer-to-ip(lib-ip:convert-ip-to-integer($i))},
+                            element td {
 
-                                    if ($i eq lib-ip:convert-integer-to-ip(lib-ip:convert-ip-to-integer($i)))
-                                    then (attribute class {"success"}, "Yes")
-                                    else (attribute class {"danger"}, "No")
-                                }
-
+                                if ($i eq lib-ip:convert-integer-to-ip(lib-ip:convert-ip-to-integer($i)))
+                                then (attribute class {"success"}, "Yes")
+                                else (attribute class {"danger"}, "No")
                             }
-                    }
-                </tbody>
+
+                        }       
+                }</tbody>
             </table>
         </div>)
